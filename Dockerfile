@@ -2,9 +2,7 @@ FROM alpine
 
 RUN apk add --update openssh \
     && rm  -rf /tmp/* /var/cache/apk/* \
-    && mkdir /var/run/sshd \
-    && ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa \
-    && ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
+    && mkdir /var/run/sshd 
 
 ADD run.sh /
 ENV AUTHORIZED_KEYS **None**
