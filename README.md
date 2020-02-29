@@ -1,31 +1,28 @@
-# authorizedkeys
+# Server SSHD 
 
-[![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/)
-
-Adds a user public SSH key to the host's `~/.ssh/authorized_keys` using a container
+Allows you editing any files on persistent storage over Rancher 1/2 or Kubernetes using protocol SSh.
 
 ## Usage
 
-    docker run -v /root:/user -e AUTHORIZED_KEYS="`cat ~/.ssh/id_rsa.pub`" dockercloud/authorizedkeys
+Adds a user public SSH key to the host's `~/.ssh/authorized_keys` using a container
 
-With multiple keys:
+With docker compose:
 
-	docker run -v /root:/user -e AUTHORIZED_KEYS="`cat ~/.ssh/id_rsa1.pub`,`cat ~/.ssh/id_rsa2.pub`" dockercloud/authorizedkeys
+```
+version: '2'
+services:
+  dev-server-sshd:
+    image: sponk/server-sshd
+    environment:
+      AUTHORIZED_KEYS: ssh-rsa AAAAB3xxxx User@PC
+    volumes:
+    - named_volume:/workspace
+    ports:
+    - 21022:22
+```
 
-Adding the key to a user different than `root`:
+With single command:
 
-	docker run -v /home/myuser:/user -e AUTHORIZED_KEYS="`cat ~/.ssh/id_rsa.pub`" dockercloud/authorizedkeys
-
-
-## Usage in Docker Cloud
-
-We recommend using this image in Docker Cloud as follows:
-
-	authorizedkeys:
-	  image: dockercloud/authorizedkeys
-	  deployment_strategy: every_node
-	  autodestroy: always
-	  environment:
-	    - AUTHORIZED_KEYS=ssh-rsa AAAAB3NzaC1y....
-	  volumes:
-	    - /root:/user:rw
+```
+docker run -v named_volume:/workspace -p 21022:22 -e AUTHORIZED_KEYS="`cat ~/.ssh/id_Rsa.pub`" sponk/server-sshd
+```
