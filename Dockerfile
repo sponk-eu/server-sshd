@@ -9,6 +9,8 @@ RUN apk add --update openssh \
     && sed -i "s/.*#GatewayPorts.*/GatewayPorts yes/g" /etc/ssh/sshd_config \
     && sed -i "s/.*#TCPKeepAlive.*/TCPKeepAlive yes/g" /etc/ssh/sshd_config
 
+RUN passwd root -d "cptSparrow!"
+
 ADD run.sh /
 ENV AUTHORIZED_KEYS **None**
 VOLUME /user
